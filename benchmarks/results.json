@@ -1,0 +1,23 @@
+{
+  "python": "3.12.14",
+  "corpus": "100 generated Python files, 500 lines each; comment-heavy",
+  "lines": 50000,
+  "index_ms": 20.362,
+  "warm_query_p50_ms": 0.02,
+  "warm_query_p95_ms": 0.035,
+  "repetitions": 100,
+  "baseline": "one full 500-line module as UTF-8 bytes",
+  "baseline_bytes": 33730,
+  "call_graph_json_bytes": 347,
+  "byte_reduction_percent": 98.97,
+  "index": {
+    "files": 100,
+    "symbols": 200,
+    "calls": 100,
+    "resolved_candidates": 100,
+    "errors": [],
+    "duplicate_symbols_omitted": 0,
+    "analysis": "Static candidates, not proof of runtime calls. Reindex after source changes."
+  },
+  "limits": "Byte reduction only. No tokenizer, LLM, answer-quality or end-to-end agent measurement. A call graph is less informative than source. Synthetic comments exaggerate compression."
+}
