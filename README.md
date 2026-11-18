@@ -4,6 +4,8 @@
 
 Built by **Neeli Yaswanth Kumar** as an independent portfolio project.
 
+[Explore the browser call-graph demo](https://kyaswanthneeli-stack.github.io/projects/codeatlas-mcp.html) — a fixed example graph; repository indexing runs in the Python service.
+
 ## What works today
 
 - Python functions, async functions, nested definitions and classes indexed in SQLite.
