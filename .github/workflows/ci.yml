@@ -36,7 +36,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install -e . tiktoken>=0.7
+      - run: python -m pip install -e . 'tiktoken>=0.7,<1'
       - name: Measure tokens on this repository
         run: python benchmarks/token_benchmark.py --root . --output benchmark-token-results.json
       - name: Upload measured result
