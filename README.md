@@ -148,3 +148,7 @@ Tree-sitter language adapters; incremental indexing; binding-aware resolution; g
 - [GitHub Actions tests and downloadable benchmark result artifact](https://github.com/kyaswanthneeli-stack/codeatlas-mcp/actions/workflows/ci.yml)
 
 The measured graph response tokens are **not** equivalent to raw source-code context: unlike the original synthetic byte comparison, the tokenizer count is real, but neither comparison proves net coding-agent token savings or output quality. A held-out agent-task benchmark remains future work. MCP is designed to run as a local stdio tool and does not need a publicly exposed code-reading service.
+
+## Captioned architecture video
+
+[Download the 20-second MP4 architecture explainer from the latest successful Actions run](https://github.com/kyaswanthneeli-stack/codeatlas-mcp/actions/workflows/walkthrough.yml). The source-of-truth render script is [docs/build_walkthrough.py](docs/build_walkthrough.py). The video is **captioned and silent** and explains the code architecture; it is **not** a recording of a live external API or paid model. Use the demo instructions above to show real backend behavior.
