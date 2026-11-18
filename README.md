@@ -138,3 +138,13 @@ The checked-in `benchmarks/results.json` records the actual run and Python versi
 Tree-sitter language adapters; incremental indexing; binding-aware resolution; graph precision/recall fixtures; tokenizer-aware payload measurement; end-to-end coding-agent task comparisons. These are planned, not implemented.
 
 [Python AST documentation](https://docs.python.org/3/library/ast.html) · [MCP Python SDK v1](https://py.sdk.modelcontextprotocol.io/v1/) · [Portfolio](https://kyaswanthneeli-stack.github.io/)
+
+## Engineering verification and realistic token measurement
+
+[![CI](https://github.com/kyaswanthneeli-stack/codeatlas-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/kyaswanthneeli-stack/codeatlas-mcp/actions/workflows/ci.yml)
+
+- [Architecture diagram, benchmark methodology and five-minute walkthrough](docs/ARCHITECTURE_AND_BENCHMARK.md)
+- [Tokenizer measurement script](benchmarks/token_benchmark.py) (tiktoken `cl100k_base`) against the real Python source in this repository.
+- [GitHub Actions tests and downloadable benchmark result artifact](https://github.com/kyaswanthneeli-stack/codeatlas-mcp/actions/workflows/ci.yml)
+
+The measured graph response tokens are **not** equivalent to raw source-code context: unlike the original synthetic byte comparison, the tokenizer count is real, but neither comparison proves net coding-agent token savings or output quality. A held-out agent-task benchmark remains future work. MCP is designed to run as a local stdio tool and does not need a publicly exposed code-reading service.
