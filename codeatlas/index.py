@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import sqlite3
+from stat import S_ISREG
 from pathlib import Path
 
 IGNORE = {'.git', '.venv', 'venv', 'node_modules', '__pycache__', 'build', 'dist', '.tox'}
@@ -15,6 +16,14 @@ class Index:
         if not self.root.is_dir():
             raise ValueError('Repository root must be a directory')
         self.database = Path(database) if database else self.root / '.codeatlas.sqlite3'
+        for suffix in ("", "-journal", "-wal", "-shm"):
+            entry = self.database.with_name(self.database.name + suffix)
+            try:
+                info = entry.lstat()
+            except FileNotFoundError:
+                continue
+            if not S_ISREG(info.st_mode) or info.st_nlink != 1:
+                raise ValueError("Index database requires regular, single-link SQLite files")
         self.db = sqlite3.connect(self.database)
         self.db.row_factory = sqlite3.Row
         self.db.executescript('''
@@ -49,9 +58,16 @@ class Index:
                     continue
                 rel = path.relative_to(self.root).as_posix()
                 try:
-                    if path.stat().st_size > MAX_FILE_BYTES:
+                    if not S_ISREG(path.lstat().st_mode):
+                        raise ValueError('Expected a regular Python source file')
+                    flags = os.O_RDONLY | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_NONBLOCK', 0)
+                    with os.fdopen(os.open(path, flags), 'rb') as stream:
+                        if not S_ISREG(os.fstat(stream.fileno()).st_mode):
+                            raise ValueError('Expected a regular Python source file')
+                        data = stream.read(MAX_FILE_BYTES + 1)
+                    if len(data) > MAX_FILE_BYTES:
                         raise ValueError('File exceeds 1 MB limit')
-                    source = path.read_text(encoding='utf-8')
+                    source = data.decode('utf-8')
                     tree = ast.parse(source, filename=rel)
                 except (OSError, ValueError, SyntaxError, UnicodeError) as exc:
                     errors.append({'path': rel, 'error': str(exc)[:240]})
