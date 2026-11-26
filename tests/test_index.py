@@ -53,6 +53,17 @@ class IndexTests(unittest.TestCase):
     def test_symlink_file_ignored(self):
         (self.root/'linked.py').symlink_to(self.root/'maths.py')
         self.assertEqual(self.db.build()['files'],2)
+    def test_index_rejects_symlink_database_and_sidecar(self):
+        alternate = self.root / 'alternate.sqlite3'
+        alternate.symlink_to(self.db.database)
+        with self.assertRaisesRegex(ValueError, 'regular, single-link'):
+            Index(self.root, alternate)
+        alternate.unlink()
+        alternate.with_name(alternate.name + '-wal').symlink_to(self.db.database)
+        with self.assertRaisesRegex(ValueError, 'regular, single-link'):
+            Index(self.root, alternate)
+        self.assertFalse(alternate.exists())
+
     def test_duplicate_definition_omitted(self):
         (self.root/'duplicate.py').write_text('def same(): pass\ndef same(): pass\n')
         self.assertEqual(self.db.build()['duplicate_symbols_omitted'],1)
